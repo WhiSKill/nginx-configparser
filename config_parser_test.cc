@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 
+// basic test using example_config file
 TEST(NginxConfigParserTest, SimpleConfig) {
   NginxConfigParser parser;
   NginxConfig out_config;
@@ -12,6 +13,7 @@ TEST(NginxConfigParserTest, SimpleConfig) {
   EXPECT_TRUE(success);
 }
 
+// test ToString
 TEST(NginxConfigStatementTest, ToString) {
     NginxConfigStatement statement;
     statement.tokens_.push_back("foo");
@@ -19,7 +21,7 @@ TEST(NginxConfigStatementTest, ToString) {
     EXPECT_EQ("foo bar;\n", statement.ToString(0));
 }
 
-
+// create class to do repetitive string tests
 class NginxStringConfigTest : public ::testing::Test {
 protected:
     bool ParseString(const std::string& config_string) {
@@ -31,22 +33,22 @@ protected:
     NginxConfig config_;
 };
 
+// test string that should pass
 TEST_F(NginxStringConfigTest, SimpleTextConfig) {
     EXPECT_TRUE(ParseString("foo bar;"));
     // EXPECT_EQ("foo", config_.statements_[0]);
 }
 
-
+// test string without statement end
 TEST_F(NginxStringConfigTest, SimpleBadTextConfig) {
     EXPECT_FALSE("foo bar");
 }
 
-
+// test nested configurations
 TEST_F(NginxStringConfigTest, NestedConfig) {
     EXPECT_TRUE(
         ParseString(
             "http {"
-            "  foo bar;"
             "  server {"
             "    listen 80;"
             "  }"
@@ -55,6 +57,7 @@ TEST_F(NginxStringConfigTest, NestedConfig) {
     );
 }
 
+// test a sample full Nginx config file
 TEST(NginxConfigParserTest, FullConfig) {
   NginxConfigParser parser;
   NginxConfig out_config;
