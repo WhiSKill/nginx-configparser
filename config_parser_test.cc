@@ -41,7 +41,7 @@ TEST_F(NginxStringConfigTest, SimpleTextConfig) {
 
 // test string without statement end
 TEST_F(NginxStringConfigTest, SimpleBadTextConfig) {
-    EXPECT_FALSE("foo bar");
+    EXPECT_FALSE(ParseString("foo bar"));
 }
 
 // test nested configurations
@@ -55,6 +55,16 @@ TEST_F(NginxStringConfigTest, NestedConfig) {
             "}"
         )
     );
+}
+
+// test a more advanced sample Nginx config file
+TEST(NginxConfigParserTest, AdvConfig) {
+  NginxConfigParser parser;
+  NginxConfig out_config;
+
+  bool success = parser.Parse("adv_config_sample", &out_config);
+
+  EXPECT_TRUE(success);
 }
 
 // test a sample full Nginx config file
